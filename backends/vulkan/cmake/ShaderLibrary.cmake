@@ -53,6 +53,10 @@ function(gen_vulkan_shader_lib_cpp shaders_path)
     endif()
   endif()
 
+  set(ET_VK_GLSL_DIR  "${ET_VK_RUNTIME_DIR}/graph/ops/glsl")
+  file(GLOB VULKAN_GLSL_SOURCES
+     "${ET_VK_GLSL_DIR}/*.glsl" "${ET_VK_GLSL_DIR}/*.glslh" "${ET_VK_GLSL_DIR}/*.comp")
+
   add_custom_command(
     COMMENT "Generating Vulkan Compute Shaders"
     OUTPUT ${VULKAN_SHADERGEN_OUT_PATH}/spv.cpp
@@ -63,7 +67,7 @@ function(gen_vulkan_shader_lib_cpp shaders_path)
       --glslc-path=${GLSLC_PATH}
       --tmp-dir-path=${VULKAN_SHADERGEN_OUT_PATH}/shader_cache/ --env
       ${VULKAN_GEN_ARG_ENV} ${GEN_SPV_ARGS}
-    DEPENDS ${shaders_path}/*
+    DEPENDS ${VULKAN_GLSL_SOURCES}
             ${EXECUTORCH_ROOT}/backends/vulkan/runtime/gen_vulkan_spv.py
   )
 
